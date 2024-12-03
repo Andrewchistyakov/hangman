@@ -48,16 +48,14 @@ public class Hangman implements Game{
     public void Play() { // main lifetime cycle
         this.GameState = "started";
 
-
         String word = ChooseWord();
-        int guessedCounter = word.length();
+        Session GameSession = new Session(word, "", word.length());
 
-        String showcase = "";
         for (int i = 0; i < word.length(); i++) {
-            showcase += "*";
+            GameSession.setShowcase(GameSession.getShowcase() + "*");
         }
 
-        System.out.println("Starting the game! You will have to guess this word: " + showcase);
+        System.out.println("Starting the game! You will have to guess this word: " + GameSession.getShowcase());
 
         Scanner inp = new Scanner(System.in);
         while (Objects.equals(this.GameState, "started")) {
@@ -67,17 +65,17 @@ public class Hangman implements Game{
                 System.out.println("You have to type in ONE LETTER! Try again >>> ");
                 guess = inp.next();
             }
-            String guessResult = Guess(word, guess.charAt(0), guessedCounter);
+            String guessResult = Guess(GameSession.getWord(), guess.charAt(0), GameSession.LeftToGuess);
 
             if (Objects.equals(guessResult, "victory")) {
                 this.GameState = "won";
                 System.out.println("Congrats! You won with the word: " + word);
             } else if (Objects.equals(guessResult, "successful guess")){
-                showcase = UpdateShowcase(word, showcase, guess.charAt(0));
-                System.out.println("You got it right! Here is what's left: " + showcase);
-                guessedCounter--;
+                GameSession.setShowcase(UpdateShowcase(GameSession.getWord(), GameSession.getShowcase(), guess.charAt(0)));
+                System.out.println("You got it right! Here is what's left: " + GameSession.getShowcase());
+                GameSession.setLeftToGuess(GameSession.LeftToGuess - 1);
             } else {
-                System.out.println("You got unlucky, try again! Here is what you got: " + showcase);
+                System.out.println("You got unlucky, try again! Here is what you got: " + GameSession.getShowcase());
             }
         }
     }

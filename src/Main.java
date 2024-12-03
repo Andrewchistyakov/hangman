@@ -1,6 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
 
+// todo: class "session"
+
 public class Main {
     public static void main(String[] args) {
         Hangman Game = new Hangman();
