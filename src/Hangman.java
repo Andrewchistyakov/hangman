@@ -3,6 +3,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Hangman implements Game{
     String GameState;
@@ -45,11 +47,19 @@ public class Hangman implements Game{
         return String.valueOf(newShowcase);
     }
 
+    private int countUniqueSymbols(String s) {
+        Set<Character> uniqueChars = new HashSet<>();
+        for (char c : s.toCharArray()) {
+            uniqueChars.add(c);
+        }
+        return uniqueChars.size();
+    }
+
     public void Play() { // main lifetime cycle
         this.GameState = "started";
 
         String word = ChooseWord();
-        Session GameSession = new Session(word, "", word.length());
+        Session GameSession = new Session(word, "", countUniqueSymbols(word), "");
 
         for (int i = 0; i < word.length(); i++) {
             GameSession.setShowcase(GameSession.getShowcase() + "*");
@@ -65,6 +75,10 @@ public class Hangman implements Game{
                 System.out.println("You have to type in ONE LETTER! Try again >>> ");
                 guess = inp.next();
             }
+            if (GameSession.Guessed.contains(guess)) {
+                System.out.println("You have already guessed this letter!");
+                continue;
+            }
             String guessResult = Guess(GameSession.getWord(), guess.charAt(0), GameSession.LeftToGuess);
 
             if (Objects.equals(guessResult, "victory")) {
@@ -74,6 +88,7 @@ public class Hangman implements Game{
                 GameSession.setShowcase(UpdateShowcase(GameSession.getWord(), GameSession.getShowcase(), guess.charAt(0)));
                 System.out.println("You got it right! Here is what's left: " + GameSession.getShowcase());
                 GameSession.setLeftToGuess(GameSession.LeftToGuess - 1);
+                GameSession.setGuessed(GameSession.Guessed + guess);
             } else {
                 System.out.println("You got unlucky, try again! Here is what you got: " + GameSession.getShowcase());
             }
