@@ -66,14 +66,22 @@ public class Hangman implements Game{
         }
 
         System.out.println("Starting the game! You will have to guess this word: " + GameSession.getShowcase());
-
+        System.out.println("If you a tired of this stupid game, just type \"end\"");
         Scanner inp = new Scanner(System.in);
         while (Objects.equals(this.GameState, "started")) {
             System.out.println("Try a letter >>> ");
             String guess = inp.next();
+            if (guess.equals("end")) {
+                System.out.println("Your word was: " + word + ". See you next time!");
+                return;
+            }
             while (guess.length() != 1) {
-                System.out.println("You have to type in ONE LETTER! Try again >>> ");
+                System.out.print("You have to type in ONE LETTER (or \"end\"! Try again >>> ");
                 guess = inp.next();
+                if (guess.equals("end")) {
+                    System.out.println("Your word was: " + word + ". See you next time!");
+                    return;
+                }
             }
             if (GameSession.Guessed.contains(guess)) {
                 System.out.println("You have already guessed this letter!");
