@@ -7,14 +7,15 @@ import java.util.Random;
 public class Hangman implements Game{
     String GameState;
 
-    private Map<String, String> WordHintMap;
+    public Map<String, String> WordHintMap;
 
-    public String Guess(String target, char guess, String showcase) { // users guesses word
+    public String Guess(String target, char guess, int counter) { // users guesses word
         char[] arr = target.toCharArray();
         for (char c : arr) {
-            if (c == guess) {
-                if ()
+            if (c == guess && counter != 1) {
                 return "successful guess";
+            } else if (c == guess) {
+                return "victory";
             }
         }
         return "failed guess";
@@ -39,6 +40,7 @@ public class Hangman implements Game{
         for (int i = 0; i < initWord.length(); i++) {
             if (initWord.charAt(i) == letterGuessed) {
                 newShowcase[i] = letterGuessed;
+            }
         }
         return String.valueOf(newShowcase);
     }
@@ -46,7 +48,9 @@ public class Hangman implements Game{
     public void Play() { // main lifetime cycle
         this.GameState = "started";
 
+
         String word = ChooseWord();
+        int guessedCounter = word.length();
 
         String showcase = "";
         for (int i = 0; i < word.length(); i++) {
@@ -63,15 +67,15 @@ public class Hangman implements Game{
                 System.out.println("You have to type in ONE LETTER! Try again >>> ");
                 guess = inp.next();
             }
-            String guessResult = Guess(word, guess.charAt(0), showcase);
+            String guessResult = Guess(word, guess.charAt(0), guessedCounter);
 
-            // TODO: handle victory
-            if (Objects.equals(result, "win")) {
+            if (Objects.equals(guessResult, "victory")) {
                 this.GameState = "won";
                 System.out.println("Congrats! You won with the word: " + word);
             } else if (Objects.equals(guessResult, "successful guess")){
                 showcase = UpdateShowcase(word, showcase, guess.charAt(0));
                 System.out.println("You got it right! Here is what's left: " + showcase);
+                guessedCounter--;
             } else {
                 System.out.println("You got unlucky, try again! Here is what you got: " + showcase);
             }
