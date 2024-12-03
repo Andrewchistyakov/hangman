@@ -1,6 +1,6 @@
 public interface Game {
-    public boolean Guess(String guess);
+    public String Guess(String guess);
     public void Resign();
-    public int ChooseWord();
+    public String ChooseWord();
     public void Play();
 }
