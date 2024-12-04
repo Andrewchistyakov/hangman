@@ -61,23 +61,34 @@ public class Hangman implements Game{
         }
 
         System.out.println("Starting the game! You will have to guess this word: " + GameSession.getShowcase());
-        System.out.println("If you a tired of this stupid game, just type \"end\"");
+        System.out.println("You can type /end to end the game or /hint to get some help");
         Scanner inp = new Scanner(System.in);
         while (Objects.equals(this.GameState, "started")) {
             System.out.println("Try a letter >>> ");
             String guess = inp.next();
-            if (guess.equals("end")) {
+
+            // checking for invalid input
+            if (guess.length() != 1 && !guess.equals("/end") && !guess.equals("/hint")) {
+                System.out.println("You have to type in ONE LETTER (or \"/end\", \"/hint\")!");
+                continue;
+            }
+
+            if (guess.equals("/end")) {
                 System.out.println("Your word was: " + word + ". See you next time!");
                 return;
+            } else if (guess.equals("/hint")) {
+                System.out.println("Here is your hint: ");
+                System.out.println(WordHintMap.get(GameSession.getWord()));
+                continue;
             }
-            while (guess.length() != 1) {
-                System.out.print("You have to type in ONE LETTER (or \"end\"! Try again >>> ");
-                guess = inp.next();
-                if (guess.equals("end")) {
-                    System.out.println("Your word was: " + word + ". See you next time!");
-                    return;
-                }
-            }
+//            while (guess.length() != 1) {
+//                System.out.print("You have to type in ONE LETTER (or \"/end\", \"/hint\")! Try again >>> ");
+//                guess = inp.next();
+//                if (guess.equals("end")) {
+//                    System.out.println("Your word was: " + word + ". See you next time!");
+//                    return;
+//                }
+//            }
             if (GameSession.Guessed.contains(guess)) {
                 System.out.println("You have already guessed this letter!");
                 continue;

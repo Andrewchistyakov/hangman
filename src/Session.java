@@ -1,3 +1,4 @@
+// class to store state of the game session
 public class Session {
     String Word;
     String Showcase;
