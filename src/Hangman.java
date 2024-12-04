@@ -23,11 +23,6 @@ public class Hangman implements Game{
         return "failed guess";
     }
 
-
-    public void Resign() { // end game before winning
-
-    }
-
     public String ChooseWord() { // choose random word from dictionary
         Random rand = new Random();
 
@@ -59,7 +54,7 @@ public class Hangman implements Game{
         this.GameState = "started";
 
         String word = ChooseWord();
-        Session GameSession = new Session(word, "", countUniqueSymbols(word), "");
+        Session GameSession = new Session(word, "", countUniqueSymbols(word), "", 7);
 
         for (int i = 0; i < word.length(); i++) {
             GameSession.setShowcase(GameSession.getShowcase() + "*");
@@ -98,7 +93,14 @@ public class Hangman implements Game{
                 GameSession.setLeftToGuess(GameSession.LeftToGuess - 1);
                 GameSession.setGuessed(GameSession.Guessed + guess);
             } else {
-                System.out.println("You got unlucky, try again! Here is what you got: " + GameSession.getShowcase());
+                if (GameSession.getMistakesLeft() == 0) {
+                    System.out.println("XD You lost! The word was: " + GameSession.getWord());
+                    this.GameState = "lost";
+                } else {
+                    GameSession.setMistakesLeft(GameSession.getMistakesLeft() - 1);
+                    System.out.println("You got unlucky, try again! Here is what you got: " + GameSession.getShowcase());
+                    System.out.println("Mistakes left: " + GameSession.getMistakesLeft());
+                }
             }
         }
     }
