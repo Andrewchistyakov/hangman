@@ -1,5 +1,4 @@
 import java.util.Objects;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
@@ -50,7 +49,8 @@ public class Hangman implements Game{
         return uniqueChars.size();
     }
 
-    public void Play() { // main lifetime cycle
+    // main lifetime cycle
+    public void Play() {
         this.GameState = "started";
 
         String word = ChooseWord();
@@ -73,6 +73,7 @@ public class Hangman implements Game{
                 continue;
             }
 
+            // commands handling
             if (guess.equals("/end")) {
                 System.out.println("Your word was: " + word + ". See you next time!");
                 return;
@@ -81,20 +82,17 @@ public class Hangman implements Game{
                 System.out.println(WordHintMap.get(GameSession.getWord()));
                 continue;
             }
-//            while (guess.length() != 1) {
-//                System.out.print("You have to type in ONE LETTER (or \"/end\", \"/hint\")! Try again >>> ");
-//                guess = inp.next();
-//                if (guess.equals("end")) {
-//                    System.out.println("Your word was: " + word + ". See you next time!");
-//                    return;
-//                }
-//            }
+
+            // checking if the letter is already guessed
             if (GameSession.Guessed.contains(guess)) {
                 System.out.println("You have already guessed this letter!");
                 continue;
             }
+
+            // processing guess
             String guessResult = Guess(GameSession.getWord(), guess.charAt(0), GameSession.LeftToGuess);
 
+            // handling guess results based on Guess() verdict
             if (Objects.equals(guessResult, "victory")) {
                 this.GameState = "won";
                 System.out.println("Congrats! You won with the word: " + word);
